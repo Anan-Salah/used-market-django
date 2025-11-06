@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-krt!n5gf)_n+dc_d@1b3bb2%^o!lm9j(=+dff!u*813pm*jvtl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['سوق الأغراض المستعملة.pythonanywhere.com']
+ALLOWED_HOSTS = ['.pythonanywhere.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
@@ -55,10 +56,11 @@ ROOT_URLCONF = 'my_first_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # ← مهم جدًا
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -66,6 +68,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'my_first_project.wsgi.application'
 
@@ -117,6 +120,8 @@ USE_TZ = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'my_app/static']
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
