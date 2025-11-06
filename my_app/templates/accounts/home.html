@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>سوق الأغراض المستعملة</title>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background:#f7f8fa; direction: rtl; margin:0; padding:20px; }
+        .top-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; }
+        .btn { display:inline-block; padding:8px 14px; border-radius:8px; text-decoration:none; margin:4px; border:1px solid #e0e0e0; background:#fff; }
+        .btn:hover { background:#f0f4ff; }
+        .btn.active { background:#007bff; color:#fff; border-color:#007bff; }
+        .badge { background:#e9ecef; border-radius:10px; padding:2px 8px; margin-right:6px; font-size:12px; }
+        .grid { display:flex; flex-wrap:wrap; gap:16px; }
+        .item { background:#fff; width:250px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.06); padding:12px; }
+        .item img { width:100%; height:170px; object-fit:cover; border-radius:8px; }
+        .item h4 { margin:10px 0 6px; font-size:18px; }
+        .meta { font-size:14px; color:#444; margin:2px 0; }
+        .actions a { text-decoration:none; color:#007bff; margin-left:10px; }
+        .actions form { display:inline; }
+        .actions button { background:#dc3545; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; }
+        .add-btn { background:#28a745; color:#fff; padding:8px 14px; border-radius:8px; text-decoration:none; }
+        .logout-btn { background:#dc3545; color:#fff; padding:8px 14px; border-radius:8px; text-decoration:none; margin-right:8px; }
+        .filters { margin: 10px 0 18px; display:flex; flex-wrap:wrap; align-items:center; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <h2>🛒 سوق الأغراض المستعملة</h2>
+        <div>
+            <a href="{% url 'add_item' %}" class="add-btn">+ أضف غرض للبيع</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="logout-btn">تسجيل الخروج</a>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+    <a href="{% url 'account' %}" class="profile-btn">👤 حسابي</a>
+{% else %}
+    <a href="{% url 'login' %}" class="login-btn">تسجيل الدخول</a>
+    <a href="{% url 'register' %}" class="register-btn">إنشاء حساب</a>
+{% endif %}
+
+        </div>
+    </div>
+
+    <!-- أزرار الفلترة -->
+    <div class="filters">
+        <a class="btn {% if active_category == 'all' %}active{% endif %}" href="?">
+            الكل <span class="badge">{{ total_all }}</span>
+        </a>
+        <a class="btn {% if active_category == 'electronics' %}active{% endif %}" href="?category=electronics">
+            إلكترونيات <span class="badge">{{ counts.electronics }}</span>
+        </a>
+        <a class="btn {% if active_category == 'clothes' %}active{% endif %}" href="?category=clothes">
+            ملابس <span class="badge">{{ counts.clothes }}</span>
+        </a>
+        <a class="btn {% if active_category == 'furniture' %}active{% endif %}" href="?category=furniture">
+            أثاث <span class="badge">{{ counts.furniture }}</span>
+        </a>
+        <a class="btn {% if active_category == 'others' %}active{% endif %}" href="?category=others">
+            أخرى <span class="badge">{{ counts.others }}</span>
+        </a>
+    </div>
+
+    <!-- شبكة العناصر -->
+    <div class="grid">
+        {% for item in items %}
+        <div class="item">
+            {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}">{% endif %}
+            <h4>{{ item.name }}</h4>
+            <div class="meta">السعر: {{ item.price }} جنيه</div>
+            {% if item.phone %}<div class="meta">📞 {{ item.phone }}</div>{% endif %}
+            <div class="meta">الفئة:
+                {% if item.category == 'electronics' %} إلكترونيات
+                {% elif item.category == 'clothes' %} ملابس
+                {% elif item.category == 'furniture' %} أثاث
+                {% else %} أخرى
+                {% endif %}
+            </div>
+            <div class="actions" style="margin-top:8px;">
+                <a href="{% url 'item_detail' item.id %}">عرض التفاصيل</a>
+                {% if request.user == item.seller %}
+                    <a href="{% url 'edit_item' item.id %}">تعديل</a>
+                    <form method="POST" action="{% url 'delete_item' item.id %}" onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
+                        {% csrf_token %}
+                        <button type="submit">حذف</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+            <p>لا توجد عناصر في هذه الفئة حاليًا.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

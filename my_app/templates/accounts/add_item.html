@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>إضافة غرض للبيع</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        input, textarea {
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>أضف غرضك للبيع</h2>
+        <input type="text" name="name" placeholder="اسم الغرض" required>
+        <textarea name="description" placeholder="وصف الغرض" rows="3"></textarea>
+        <input type="number" name="price" placeholder="السعر" required>
+        <label>رقم الهاتف للتواصل</label>
+        <input type="text" name="phone" placeholder="مثال: 01012345678" required>
+        <input type="file" name="image" accept="image/*">
+<label>اختر الفئة</label>
+<select name="category" required>
+    <option value="electronics" {% if item.category == 'electronics' %}selected{% endif %}>أجهزة إلكترونية</option>
+    <option value="clothes" {% if item.category == 'clothes' %}selected{% endif %}>ملابس</option>
+    <option value="furniture" {% if item.category == 'furniture' %}selected{% endif %}>أثاث</option>
+    <option value="others" {% if item.category == 'others' %}selected{% endif %}>أخرى</option>
+</select>
+
+
+        <button type="submit">نشر الغرض</button>
+        <a href="{% url 'home' %}">⬅️ العودة للسوق</a>
+        
+
+
+    </form>
+</body>
+</html>

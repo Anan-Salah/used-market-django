@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ item.name }}</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            background-color: #fafafa;
+            text-align: center;
+            padding: 40px;
+        }
+        img {
+            width: 300px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ item.name }}</h2>
+    {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+    {% endif %}
+    <p><strong>الوصف:</strong> {{ item.description }}</p>
+    <p><strong>السعر:</strong> {{ item.price }} شيكل</p>
+    <p><strong>رقم التواصل:</strong> {{ item.phone }}</p>
+    <p><strong>البائع:</strong> {{ item.seller.username }}</p>
+    {% if request.user == item.seller %}
+<a href="{% url 'edit_item' item.id %}" 
+   style="background-color: orange; color: white; padding: 8px 12px; border-radius: 5px; text-decoration: none;">
+   ✏️ تعديل
+</a>
+{% endif %}
+
+    
+    <a href="{% url 'home' %}">⬅️ العودة للسوق</a>
+</body>
+</html>

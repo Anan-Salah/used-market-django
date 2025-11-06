@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>إنشاء حساب | سوق الأدوات المستعملة</title>
+    <link rel="stylesheet" href="{% static 'register.css' %}">
+
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="register-container">
+        <h2>إنشاء حساب جديد</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="error">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="اسم المستخدم" required>
+            <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+            <input type="password" name="password1" placeholder="كلمة المرور" required>
+            <input type="password" name="password2" placeholder="تأكيد كلمة المرور" required>
+            <button type="submit">إنشاء الحساب</button>
+        </form>
+
+        <p style="margin-top: 15px;">هل لديك حساب بالفعل؟ <a href="{% url 'login' %}">سجّل الدخول</a></p>
+    </div>
+</body>
+</html>
